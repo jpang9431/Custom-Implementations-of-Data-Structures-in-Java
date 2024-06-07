@@ -33,6 +33,9 @@ public class MyLinkedList<T> {
     }
 
     public T remove(int index){
+        if (index>=size){
+            return null;
+        }
         Node<T> curNode = null;
         if (index>=size/2){
             curNode = tail;
