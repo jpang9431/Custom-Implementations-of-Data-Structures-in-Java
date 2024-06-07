@@ -49,7 +49,5 @@ public class MyStack<T> {
         }
         System.out.println("Expected true");
         System.out.println(stack.empty());
-        
-
     }
 }
