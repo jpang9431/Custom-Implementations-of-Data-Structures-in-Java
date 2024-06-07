@@ -10,21 +10,27 @@ public class MyQueue<T> {
     public boolean offer(T data){
         return list.add(data);
     }
+    
     public T peek(){
         return list.get(0);
     }
+
     public T poll(){
         return list.remove(0);
     }
+
     public T remove(){
         return list.remove(0);
     }
+
     public int size(){
         return list.size();
     }
+
     public void print(){
         list.print();
     }
+
     public static void main(String[] args){
         MyQueue<Integer> testQueue = new MyQueue<>();
         for(int i=0; i<10; i++){
