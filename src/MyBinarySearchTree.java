@@ -1,6 +1,6 @@
 public class MyBinarySearchTree<T extends Comparable<T>>{
     private Node<T> head = null;
-    private int size = 0;
+    //private int size = 0;
     class Node<K extends Comparable<K>> implements Comparable<Node<K>>{
         K data = null;
         Node<K> left = null;
@@ -105,6 +105,8 @@ public class MyBinarySearchTree<T extends Comparable<T>>{
                 return curNode.right;
             } else if (curNode.right==null){
                 return curNode.left;
+            } else if (curNode.count>1){
+                curNode.count--;
             } else {
                 Node<T> swapNode = findMax(curNode.left);
                 curNode.data = swapNode.data;
@@ -112,6 +114,14 @@ public class MyBinarySearchTree<T extends Comparable<T>>{
             }
             return curNode;
         }
+    }
+
+    public T findMax(){
+        return findMax(head).data;
+    }
+
+    public T findMin(){
+        return findMin(head).data;
     }
 
     public Node<T> findMax(Node<T> curNode){
@@ -153,8 +163,43 @@ public class MyBinarySearchTree<T extends Comparable<T>>{
         }
     }
 
+    public void print(){
+        print(head);
+    }
+
+    public void print(Node<T> node){
+        if (node==null){
+            return;
+        }
+        print(node.left);
+        System.out.print(node.data+" ");
+        print(node.right);
+    }
+
+    public void printHead(){
+        System.out.println(head.data);
+    }
+
     public static void main(String[] args){
-        System.out.println("Sucessfully complied");
+        MyBinarySearchTree<Integer> testTree = new MyBinarySearchTree<>();
+        int[] nums = {14,6,3,2,8,15,4,19,0,1,11,9,5,16,17,18,20,12,13,10,7};
+        for(int i:nums){
+            testTree.add(nums[i]);
+        }
+        testTree.print();
+        System.out.println("");
+        testTree.remove(4);
+        testTree.print();
+        testTree.remove(11);
+        System.out.println("");
+        testTree.print();
+        System.out.println("");
+        System.out.println(testTree.findMax());
+        System.out.println(testTree.findMin());
+        testTree.remove(20);
+        System.out.println(testTree.findMax());
+        testTree.print();
+        //testTree.print();
     }
 
 }
