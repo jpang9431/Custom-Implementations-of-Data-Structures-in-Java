@@ -92,6 +92,7 @@ public class MyBinarySearchTree<T extends Comparable<T>>{
         }
     }
 
+    //Thanks geeks for geeks for teaching me a method of BST remvoal: https://www.geeksforgeeks.org/deletion-in-binary-search-tree/
     public Node<T> remove(Node<T> curNode, T data){
         if (curNode==null){
             return curNode;
