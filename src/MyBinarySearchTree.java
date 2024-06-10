@@ -1,6 +1,7 @@
 public class MyBinarySearchTree<T extends Comparable<T>>{
     private Node<T> head = null;
-    //private int size = 0;
+    private int size = 0;
+    private int unique = 0;
     class Node<K extends Comparable<K>> implements Comparable<Node<K>>{
         K data = null;
         Node<K> left = null;
@@ -44,9 +45,13 @@ public class MyBinarySearchTree<T extends Comparable<T>>{
         }
     }
 
-    /*public int size(){
-        
-    }*/
+    public int size(){
+        return size;
+    }
+
+    public int unique(){
+        return unique;
+    }
 
     public boolean contains(Object o){
         try{
@@ -108,10 +113,13 @@ public class MyBinarySearchTree<T extends Comparable<T>>{
                 return curNode.left;
             } else if (curNode.count>1){
                 curNode.count--;
+                size--;
             } else {
                 Node<T> swapNode = findMax(curNode.left);
                 curNode.data = swapNode.data;
                 curNode.left = remove(curNode.left, swapNode.data);
+                size--;
+                unique--;
             }
             return curNode;
         }
@@ -147,12 +155,15 @@ public class MyBinarySearchTree<T extends Comparable<T>>{
         } else {
             add(data, head);
         }
+        size++;
+        unique++;
     }
 
     public void add(T data, Node<T> curNode){
         int compare = data.compareTo(curNode.data);
         if (compare==0){
             curNode.count++;
+            unique--;
         } else if (compare<0&&curNode.left==null){
             curNode.left = new Node<T>(data);
         } else if (compare<0){
@@ -181,26 +192,39 @@ public class MyBinarySearchTree<T extends Comparable<T>>{
         System.out.println(head.data);
     }
 
+    public static void printSeperator(){
+        System.out.println("------------------------------------");
+    }
+
+    public static void printSeperatorWithNewLineStart(){
+        System.out.print("\n------------------------------------");
+    }
+
     public static void main(String[] args){
         MyBinarySearchTree<Integer> testTree = new MyBinarySearchTree<>();
         int[] nums = {14,6,3,2,8,15,4,19,0,1,11,9,5,16,17,18,20,12,13,10,7};
         for(int i:nums){
             testTree.add(nums[i]);
         }
+        System.out.println("Expected: 0-20 in order inclusive");
         testTree.print();
-        System.out.println("");
-        testTree.remove(4);
+        printSeperatorWithNewLineStart();
+        System.out.println("\nExpected: true and 0-20 in order without 4");
+        System.out.println(testTree.remove(4));
         testTree.print();
-        testTree.remove(11);
-        System.out.println("");
+        printSeperatorWithNewLineStart();
+        System.out.println("\nEpxected true and 0-20 without 4 or 11");
+        System.out.println(testTree.remove(11));
         testTree.print();
-        System.out.println("");
+        printSeperatorWithNewLineStart();
+        System.out.println("\nExpected: 20 and 0");
         System.out.println(testTree.findMax());
         System.out.println(testTree.findMin());
+        printSeperator();
         testTree.remove(20);
+        System.out.println("Expected: 19 and 0-19 without 4 or 11");
         System.out.println(testTree.findMax());
         testTree.print();
-        //testTree.print();
     }
 
 }
