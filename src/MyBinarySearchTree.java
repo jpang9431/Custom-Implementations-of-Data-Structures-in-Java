@@ -76,13 +76,37 @@ public class MyBinarySearchTree<T extends Comparable<T>>{
 
     public boolean remove(Object o){
         try{
-            boolean foundNode = contains(o);
+            
             @SuppressWarnings("unchecked")
             T data = (T) o;
+            Node<T> node =  get(data, head);
+            boolean foundNode = node!=null;
+            if (node!=null){
+                size--;
+            }
+            if (node.count>1){
+                unique--;
+            }
             head = remove(head, data);
+            
             return foundNode;
         } catch(Exception e){
             return false;
+        }
+    }
+
+    public Node<T> get(T data, Node<T> curNode){
+        if (curNode==null){
+            return null;
+        } else {
+            int value = curNode.compareTo(data);
+            if (value<0){
+                return get(data, curNode.left);
+            } else if (value>0){
+                return get(data, curNode.right);
+            } else {
+                return curNode;
+            }
         }
     }
 
@@ -113,13 +137,10 @@ public class MyBinarySearchTree<T extends Comparable<T>>{
                 return curNode.left;
             } else if (curNode.count>1){
                 curNode.count--;
-                size--;
             } else {
                 Node<T> swapNode = findMax(curNode.left);
                 curNode.data = swapNode.data;
                 curNode.left = remove(curNode.left, swapNode.data);
-                size--;
-                unique--;
             }
             return curNode;
         }
@@ -206,15 +227,20 @@ public class MyBinarySearchTree<T extends Comparable<T>>{
         for(int i:nums){
             testTree.add(nums[i]);
         }
+        System.out.println("Expected: 21");
+        System.out.println(testTree.size());
+        printSeperator();
         System.out.println("Expected: 0-20 in order inclusive");
         testTree.print();
         printSeperatorWithNewLineStart();
-        System.out.println("\nExpected: true and 0-20 in order without 4");
+        System.out.println("\nExpected: true, 20, and 0-20 in order without 4");
         System.out.println(testTree.remove(4));
+        System.out.println(testTree.size());
         testTree.print();
         printSeperatorWithNewLineStart();
-        System.out.println("\nEpxected true and 0-20 without 4 or 11");
+        System.out.println("\nEpxected true, 19, and 0-20 without 4 or 11");
         System.out.println(testTree.remove(11));
+        System.out.println(testTree.size());
         testTree.print();
         printSeperatorWithNewLineStart();
         System.out.println("\nExpected: 20 and 0");
@@ -222,9 +248,17 @@ public class MyBinarySearchTree<T extends Comparable<T>>{
         System.out.println(testTree.findMin());
         printSeperator();
         testTree.remove(20);
-        System.out.println("Expected: 19 and 0-19 without 4 or 11");
+        System.out.println("Expected: 19, 18, and 0-19 without 4 or 11");
         System.out.println(testTree.findMax());
+        System.out.println(testTree.size());
         testTree.print();
+        printSeperatorWithNewLineStart();
+        System.out.println("\nExpected: 18");
+        System.out.println(testTree.size());
+        printSeperator();
+        testTree.add(0);
+        System.out.println("Expected: 19");
+        System.out.println(testTree.size());
     }
 
 }
