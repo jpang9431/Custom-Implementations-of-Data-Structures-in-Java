@@ -1,18 +1,21 @@
-public class MyBinarySearchTree<T extends Comparable<T>>{
+public class MyBinarySearchTree<T extends Comparable<T>> {
     private Node<T> head = null;
     private int size = 0;
     private int unique = 0;
-    class Node<K extends Comparable<K>> implements Comparable<Node<K>>{
+
+    class Node<K extends Comparable<K>> implements Comparable<Node<K>> {
         K data = null;
         Node<K> left = null;
         Node<K> right = null;
         int count = 1;
-        Node(K data){
+
+        Node(K data) {
             this.data = data;
         }
+
         @Override
-        public boolean equals(Object other){
-            if (!(other instanceof Node)){
+        public boolean equals(Object other) {
+            if (!(other instanceof Node)) {
                 return false;
             } else {
                 @SuppressWarnings("unchecked")
@@ -20,89 +23,94 @@ public class MyBinarySearchTree<T extends Comparable<T>>{
                 return this.data.equals(otherNode.data);
             }
         }
+
         @Override
-        public int compareTo(Node<K> other){
+        public int compareTo(Node<K> other) {
             return other.data.compareTo(this.data);
         }
-        public int compareTo(K other){
+
+        public int compareTo(K other) {
             return other.compareTo(this.data);
         }
-        public int numChildren(){
+
+        public int numChildren() {
             int num = 0;
-            if (left!=null){
+            if (left != null) {
                 num++;
             }
-            if (right!=null){
+            if (right != null) {
                 num++;
             }
             return num;
         }
-        public boolean hasLeft(){
-            return left!=null;
+
+        public boolean hasLeft() {
+            return left != null;
         }
-        public boolean hasRight(){
-            return right!=null;
+
+        public boolean hasRight() {
+            return right != null;
         }
     }
 
-    public int size(){
+    public int size() {
         return size;
     }
 
-    public int unique(){
+    public int unique() {
         return unique;
     }
 
-    public boolean contains(Object o){
-        try{
+    public boolean contains(Object o) {
+        try {
             @SuppressWarnings("unchecked")
             T data = (T) o;
             Node<T> curNode = head;
-            while (curNode!=null){
+            while (curNode != null) {
                 int value = curNode.compareTo(data);
-                if (value<0){
+                if (value < 0) {
                     curNode = curNode.left;
-                } else if (value>0){
+                } else if (value > 0) {
                     curNode = curNode.right;
                 } else {
                     return true;
                 }
             }
             return false;
-        } catch(Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
 
-    public boolean remove(Object o){
-        try{
-            
+    public boolean remove(Object o) {
+        try {
+
             @SuppressWarnings("unchecked")
             T data = (T) o;
-            Node<T> node =  get(data, head);
-            boolean foundNode = node!=null;
-            if (node!=null){
+            Node<T> node = get(data, head);
+            boolean foundNode = node != null;
+            if (node != null) {
                 size--;
             }
-            if (node.count>1){
+            if (node.count > 1) {
                 unique--;
             }
             head = remove(head, data);
-            
+
             return foundNode;
-        } catch(Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
 
-    public Node<T> get(T data, Node<T> curNode){
-        if (curNode==null){
+    public Node<T> get(T data, Node<T> curNode) {
+        if (curNode == null) {
             return null;
         } else {
             int value = curNode.compareTo(data);
-            if (value<0){
+            if (value < 0) {
                 return get(data, curNode.left);
-            } else if (value>0){
+            } else if (value > 0) {
                 return get(data, curNode.right);
             } else {
                 return curNode;
@@ -110,10 +118,10 @@ public class MyBinarySearchTree<T extends Comparable<T>>{
         }
     }
 
-    public char isLeftOrRight(Node<T> ancestorNode, Node<T> curNode){
-        if (ancestorNode.left.equals(curNode)){
+    public char isLeftOrRight(Node<T> ancestorNode, Node<T> curNode) {
+        if (ancestorNode.left.equals(curNode)) {
             return 'L';
-        } else if (ancestorNode.right.equals(curNode)){
+        } else if (ancestorNode.right.equals(curNode)) {
             return 'R';
         } else {
             System.out.println("Error");
@@ -121,21 +129,22 @@ public class MyBinarySearchTree<T extends Comparable<T>>{
         }
     }
 
-    //Thanks geeks for geeks for teaching me a method of BST remvoal: https://www.geeksforgeeks.org/deletion-in-binary-search-tree/
-    public Node<T> remove(Node<T> curNode, T data){
-        if (curNode==null){
+    // Thanks geeks for geeks for teaching me a method of BST remvoal:
+    // https://www.geeksforgeeks.org/deletion-in-binary-search-tree/
+    public Node<T> remove(Node<T> curNode, T data) {
+        if (curNode == null) {
             return curNode;
         } else {
             int value = curNode.compareTo(data);
-            if (value<0){
+            if (value < 0) {
                 curNode.left = remove(curNode.left, data);
-            } else if (value>0){
+            } else if (value > 0) {
                 curNode.right = remove(curNode.right, data);
-            } else if (curNode.left==null){
+            } else if (curNode.left == null) {
                 return curNode.right;
-            } else if (curNode.right==null){
+            } else if (curNode.right == null) {
                 return curNode.left;
-            } else if (curNode.count>1){
+            } else if (curNode.count > 1) {
                 curNode.count--;
             } else {
                 Node<T> swapNode = findMax(curNode.left);
@@ -146,32 +155,30 @@ public class MyBinarySearchTree<T extends Comparable<T>>{
         }
     }
 
-    public T findMax(){
+    public T findMax() {
         return findMax(head).data;
     }
 
-    public T findMin(){
+    public T findMin() {
         return findMin(head).data;
     }
 
-    public Node<T> findMax(Node<T> curNode){
-        while(curNode.right!=null){
+    public Node<T> findMax(Node<T> curNode) {
+        while (curNode.right != null) {
             curNode = curNode.right;
         }
         return curNode;
     }
 
-    public Node<T> findMin(Node<T> curNode){
-        while (curNode.left!=null){
+    public Node<T> findMin(Node<T> curNode) {
+        while (curNode.left != null) {
             curNode = curNode.left;
         }
         return curNode;
-    } 
+    }
 
-    
-
-    public void add(T data){
-        if (head==null){
+    public void add(T data) {
+        if (head == null) {
             head = new Node<T>(data);
         } else {
             add(data, head);
@@ -180,51 +187,51 @@ public class MyBinarySearchTree<T extends Comparable<T>>{
         unique++;
     }
 
-    public void add(T data, Node<T> curNode){
+    public void add(T data, Node<T> curNode) {
         int compare = data.compareTo(curNode.data);
-        if (compare==0){
+        if (compare == 0) {
             curNode.count++;
             unique--;
-        } else if (compare<0&&curNode.left==null){
+        } else if (compare < 0 && curNode.left == null) {
             curNode.left = new Node<T>(data);
-        } else if (compare<0){
+        } else if (compare < 0) {
             add(data, curNode.left);
-        } else if (compare>0&&curNode.right==null){
+        } else if (compare > 0 && curNode.right == null) {
             curNode.right = new Node<T>(data);
-        } else if (compare>0){
+        } else if (compare > 0) {
             add(data, curNode.right);
         }
     }
 
-    public void print(){
+    public void print() {
         print(head);
     }
 
-    public void print(Node<T> node){
-        if (node==null){
+    public void print(Node<T> node) {
+        if (node == null) {
             return;
         }
         print(node.left);
-        System.out.print(node.data+" ");
+        System.out.print(node.data + " ");
         print(node.right);
     }
 
-    public void printHead(){
+    public void printHead() {
         System.out.println(head.data);
     }
 
-    public static void printSeperator(){
+    public static void printSeperator() {
         System.out.println("------------------------------------");
     }
 
-    public static void printSeperatorWithNewLineStart(){
+    public static void printSeperatorWithNewLineStart() {
         System.out.print("\n------------------------------------");
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         MyBinarySearchTree<Integer> testTree = new MyBinarySearchTree<>();
-        int[] nums = {14,6,3,2,8,15,4,19,0,1,11,9,5,16,17,18,20,12,13,10,7};
-        for(int i:nums){
+        int[] nums = { 14, 6, 3, 2, 8, 15, 4, 19, 0, 1, 11, 9, 5, 16, 17, 18, 20, 12, 13, 10, 7 };
+        for (int i : nums) {
             testTree.add(nums[i]);
         }
         System.out.println("Expected: 21");

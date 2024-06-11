@@ -3,34 +3,37 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
-class MyAdjacenyMatrixGraph<T>{
+
+class MyAdjacenyMatrixGraph<T> {
     private HashMap<T, Integer> integerPairings = new HashMap<T, Integer>();
     private int[][] graph = new int[0][0];
 
-    class dijkstrasNode implements Comparable<dijkstrasNode>{
+    class dijkstrasNode implements Comparable<dijkstrasNode> {
         int node;
         Integer distance;
-        dijkstrasNode(int node, int distance){
+
+        dijkstrasNode(int node, int distance) {
             this.node = node;
             this.distance = distance;
         }
+
         @Override
         public int compareTo(MyAdjacenyMatrixGraph<T>.dijkstrasNode o) {
             return this.distance.compareTo(o.distance);
         }
-        
+
     }
 
-    public int dijkstras(T source, T destination){
+    public int dijkstras(T source, T destination) {
         Integer sourceInteger = integerPairings.get(source);
         Integer destinationInteger = integerPairings.get(destination);
-        if (sourceInteger==null||destinationInteger==null){
+        if (sourceInteger == null || destinationInteger == null) {
             return -1;
         }
         int distance[] = new int[graph.length];
-        boolean found[] =  new boolean[graph.length];
-        for(int i=0; i<graph.length; i++){
-            if (i!=sourceInteger){
+        boolean found[] = new boolean[graph.length];
+        for (int i = 0; i < graph.length; i++) {
+            if (i != sourceInteger) {
                 distance[i] = Integer.MAX_VALUE;
             } else {
                 distance[i] = 0;
@@ -38,14 +41,14 @@ class MyAdjacenyMatrixGraph<T>{
         }
         PriorityQueue<dijkstrasNode> listOfNodes = new PriorityQueue<>();
         listOfNodes.add(new dijkstrasNode(sourceInteger, 0));
-        while(!listOfNodes.isEmpty()){
+        while (!listOfNodes.isEmpty()) {
             int node = listOfNodes.poll().node;
-            if (!found[node]){
+            if (!found[node]) {
                 found[node] = true;
-                for(int i=0; i<graph.length; i++){
-                    if (!found[i]&&graph[node][i]>0){
+                for (int i = 0; i < graph.length; i++) {
+                    if (!found[i] && graph[node][i] > 0) {
                         int tempDistance = distance[node] + graph[node][i];
-                        if (distance[i]>tempDistance){
+                        if (distance[i] > tempDistance) {
                             distance[i] = tempDistance;
                             listOfNodes.add(new dijkstrasNode(i, distance[i]));
                         }
@@ -53,40 +56,40 @@ class MyAdjacenyMatrixGraph<T>{
                 }
             }
         }
-        if (distance[destinationInteger]<Integer.MAX_VALUE){
+        if (distance[destinationInteger] < Integer.MAX_VALUE) {
             return distance[destinationInteger];
         } else {
             return -1;
         }
     }
-    
-    //Note this will return the least number of vertexes
-    public int depthFirstSearch(T source, T destination){
+
+    // Note this will return the least number of vertexes
+    public int depthFirstSearch(T source, T destination) {
         Integer sourceInteger = integerPairings.get(source);
         Integer destinationInteger = integerPairings.get(destination);
-        if (sourceInteger==null||destinationInteger==null){
+        if (sourceInteger == null || destinationInteger == null) {
             return -1;
         }
         boolean visited[] = new boolean[graph.length];
         int distance = depthFirstSearch(sourceInteger, visited, destinationInteger, 0);
-        if (distance==Integer.MAX_VALUE){
+        if (distance == Integer.MAX_VALUE) {
             return -1;
         } else {
             return distance;
         }
     }
 
-    public int depthFirstSearch(int currentNode, boolean[] found, int targetNode, int currentDistance){
+    public int depthFirstSearch(int currentNode, boolean[] found, int targetNode, int currentDistance) {
         found[currentNode] = true;
-        if (currentNode==targetNode){
+        if (currentNode == targetNode) {
             found[currentNode] = false;
             return currentDistance;
         }
         int distance = Integer.MAX_VALUE;
-        for(int i=0; i<graph.length; i++){
-            if (graph[currentNode][i]>0&&!found[i]){
-                int tempDistance = depthFirstSearch(i, found, targetNode, currentDistance+1);
-                if (tempDistance<distance){
+        for (int i = 0; i < graph.length; i++) {
+            if (graph[currentNode][i] > 0 && !found[i]) {
+                int tempDistance = depthFirstSearch(i, found, targetNode, currentDistance + 1);
+                if (tempDistance < distance) {
                     distance = tempDistance;
                 }
             }
@@ -95,34 +98,34 @@ class MyAdjacenyMatrixGraph<T>{
         return distance;
     }
 
-    //Note this will return the least number of vertexes
-    public int breadthFirstSearch(T source, T destination){
+    // Note this will return the least number of vertexes
+    public int breadthFirstSearch(T source, T destination) {
         Integer sourceInteger = integerPairings.get(source);
         Integer destinationInteger = integerPairings.get(destination);
-        if (sourceInteger==null||destinationInteger==null){
+        if (sourceInteger == null || destinationInteger == null) {
             return -1;
         }
         boolean visited[] = new boolean[graph.length];
         Queue<Integer> nodes = new LinkedList<>();
-        for(int i=0; i<graph.length; i++){
-            if (graph[sourceInteger][i]>0){
+        for (int i = 0; i < graph.length; i++) {
+            if (graph[sourceInteger][i] > 0) {
                 nodes.add(i);
                 visited[i] = true;
             }
         }
         Queue<Integer> tempNodes = new LinkedList<>();
         int distance = 1;
-        while(nodes.size()>0){
+        while (nodes.size() > 0) {
             int node = nodes.poll();
-            if (node==destinationInteger){
+            if (node == destinationInteger) {
                 return distance;
             }
-            for(int i=0; i<graph.length; i++){
-                if (graph[node][i]>0&&!visited[i]){
+            for (int i = 0; i < graph.length; i++) {
+                if (graph[node][i] > 0 && !visited[i]) {
                     tempNodes.add(i);
                 }
             }
-            if (nodes.size()==0){
+            if (nodes.size() == 0) {
                 distance++;
                 nodes = tempNodes;
                 tempNodes = new LinkedList<>();
@@ -131,10 +134,10 @@ class MyAdjacenyMatrixGraph<T>{
         return -1;
     }
 
-    public boolean removeEdge(T vert1, T vert2){
+    public boolean removeEdge(T vert1, T vert2) {
         Integer key1 = integerPairings.get(vert1);
         Integer key2 = integerPairings.get(vert2);
-        if (key1!=null&&key2!=null){
+        if (key1 != null && key2 != null) {
             graph[key1][key2] = 0;
             graph[key2][key1] = 0;
             return true;
@@ -143,10 +146,10 @@ class MyAdjacenyMatrixGraph<T>{
         }
     }
 
-    public boolean addEdge(T vert1, T vert2){
+    public boolean addEdge(T vert1, T vert2) {
         Integer key1 = integerPairings.get(vert1);
         Integer key2 = integerPairings.get(vert2);
-        if (key1!=null&&key2!=null){
+        if (key1 != null && key2 != null) {
             graph[key1][key2]++;
             graph[key2][key1]++;
             return true;
@@ -155,10 +158,10 @@ class MyAdjacenyMatrixGraph<T>{
         }
     }
 
-    public int setEdge(T vert1, T vert2, int weight){
+    public int setEdge(T vert1, T vert2, int weight) {
         Integer key1 = integerPairings.get(vert1);
         Integer key2 = integerPairings.get(vert2);
-        if (key1!=null&&key2!=null){
+        if (key1 != null && key2 != null) {
             int previousSet = graph[key1][key2];
             graph[key1][key2] = weight;
             graph[key2][key1] = weight;
@@ -168,14 +171,14 @@ class MyAdjacenyMatrixGraph<T>{
         }
     }
 
-    public boolean addVertex(T data){
-        if (integerPairings.containsKey(data)){
+    public boolean addVertex(T data) {
+        if (integerPairings.containsKey(data)) {
             return false;
         } else {
             integerPairings.put(data, graph.length);
-            int[][] tempGraph = new int[graph.length+1][graph.length+1];
-            for(int row=0; row<graph.length; row++){
-                for(int col=0; col<graph[0].length; col++){
+            int[][] tempGraph = new int[graph.length + 1][graph.length + 1];
+            for (int row = 0; row < graph.length; row++) {
+                for (int col = 0; col < graph[0].length; col++) {
                     tempGraph[row][col] = graph[row][col];
                 }
             }
@@ -184,21 +187,21 @@ class MyAdjacenyMatrixGraph<T>{
         }
     }
 
-    public boolean removeVertex(T data){
+    public boolean removeVertex(T data) {
         Integer index = integerPairings.remove(data);
-        if (index==null){
+        if (index == null) {
             return false;
         } else {
-            int[][] tempGraph = new int[graph.length-1][graph.length-1];
-            for(int row=0; row<graph.length; row++){
-                for(int col=0; col<graph.length; col++){
-                    if (col!=index&&row!=index){
+            int[][] tempGraph = new int[graph.length - 1][graph.length - 1];
+            for (int row = 0; row < graph.length; row++) {
+                for (int col = 0; col < graph.length; col++) {
+                    if (col != index && row != index) {
                         int newRow = row;
                         int newCol = col;
-                        if (col>index){
+                        if (col > index) {
                             newCol--;
                         }
-                        if (row>index){
+                        if (row > index) {
                             newRow--;
                         }
                         tempGraph[newRow][newCol] = graph[row][col];
@@ -206,52 +209,52 @@ class MyAdjacenyMatrixGraph<T>{
                 }
             }
             graph = tempGraph;
-            for (Map.Entry<T,Integer>entry:integerPairings.entrySet()){
-                if (entry.getValue()>index){
-                    integerPairings.replace(entry.getKey(), entry.getValue()-1);
+            for (Map.Entry<T, Integer> entry : integerPairings.entrySet()) {
+                if (entry.getValue() > index) {
+                    integerPairings.replace(entry.getKey(), entry.getValue() - 1);
                 }
             }
             return true;
         }
     }
 
-    public void print(){
-        for(int row=0; row<graph.length; row++){
-            for(int col=0; col<graph.length; col++){
-                System.out.print(graph[row][col]+",");
+    public void print() {
+        for (int row = 0; row < graph.length; row++) {
+            for (int col = 0; col < graph.length; col++) {
+                System.out.print(graph[row][col] + ",");
             }
             System.out.println("");
         }
     }
 
-    public void printMappings(){
-        for(Map.Entry<T,Integer> entry : integerPairings.entrySet()){
-            System.out.println(entry.getKey()+"|"+entry.getValue());
+    public void printMappings() {
+        for (Map.Entry<T, Integer> entry : integerPairings.entrySet()) {
+            System.out.println(entry.getKey() + "|" + entry.getValue());
         }
     }
 
-    public static void printSeperator(){
+    public static void printSeperator() {
         System.out.println("------------------------------------");
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         MyAdjacenyMatrixGraph<Integer> graph = new MyAdjacenyMatrixGraph<>();
-        for(int i=0; i<7; i++){
+        for (int i = 0; i < 7; i++) {
             graph.addVertex(i);
         }
-        //graph.printMappings();
+        // graph.printMappings();
         graph.addEdge(0, 1);
         graph.addEdge(0, 2);
         graph.addEdge(1, 2);
-        graph.addEdge(1,3);
-        graph.addEdge(2,4);
-        graph.addEdge(3,4);
-        graph.addEdge(4,5);
-        graph.addEdge(5,6);
+        graph.addEdge(1, 3);
+        graph.addEdge(2, 4);
+        graph.addEdge(3, 4);
+        graph.addEdge(4, 5);
+        graph.addEdge(5, 6);
         System.out.println("Expected: see https://visualgo.net/en/graphds");
         graph.print();
         printSeperator();
-        //Note the searching alogithims will return the least number of vertexes
+        // Note the searching alogithims will return the least number of vertexes
         System.out.println("Expected: 4");
         System.out.println(graph.breadthFirstSearch(0, 6));
         printSeperator();
@@ -270,4 +273,4 @@ class MyAdjacenyMatrixGraph<T>{
         System.out.println("Expected: 2");
         System.out.println(graph.dijkstras(0, 3));
     }
-} 
+}
