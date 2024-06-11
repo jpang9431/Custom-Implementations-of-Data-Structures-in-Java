@@ -27,11 +27,9 @@ class MyAdjacenyMatrixGraph<T>{
             found[currentNode] = false;
             return currentDistance;
         }
-        //System.out.println(currentDistance+"|"+currentNode);
         int distance = Integer.MAX_VALUE;
         for(int i=0; i<graph.length; i++){
             if (graph[currentNode][i]>0&&!found[i]){
-                //System.out.println("?");
                 int tempDistance = depthFirstSearch(i, found, targetNode, currentDistance+1);
                 if (tempDistance<distance){
                     distance = tempDistance;
