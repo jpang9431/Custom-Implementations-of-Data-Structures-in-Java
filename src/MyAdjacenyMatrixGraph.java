@@ -6,6 +6,42 @@ class MyAdjacenyMatrixGraph<T>{
     private HashMap<T, Integer> integerPairings = new HashMap<T, Integer>();
     private int[][] graph = new int[0][0];
 
+    public int depthFirstSearch(T source, T destination){
+        Integer sourceInteger = integerPairings.get(source);
+        Integer destinationInteger = integerPairings.get(destination);
+        if (sourceInteger==null||destinationInteger==null){
+            return -1;
+        }
+        boolean visited[] = new boolean[graph.length];
+        int distance = depthFirstSearch(sourceInteger, visited, destinationInteger, 0);
+        if (distance==Integer.MAX_VALUE){
+            return -1;
+        } else {
+            return distance;
+        }
+    }
+
+    public int depthFirstSearch(int currentNode, boolean[] found, int targetNode, int currentDistance){
+        found[currentNode] = true;
+        if (currentNode==targetNode){
+            found[currentNode] = false;
+            return currentDistance;
+        }
+        //System.out.println(currentDistance+"|"+currentNode);
+        int distance = Integer.MAX_VALUE;
+        for(int i=0; i<graph.length; i++){
+            if (graph[currentNode][i]>0&&!found[i]){
+                //System.out.println("?");
+                int tempDistance = depthFirstSearch(i, found, targetNode, currentDistance+1);
+                if (tempDistance<distance){
+                    distance = tempDistance;
+                }
+            }
+        }
+        found[currentNode] = false;
+        return distance;
+    }
+
     public int breadthFirstSearch(T source, T destination){
         Integer sourceInteger = integerPairings.get(source);
         Integer destinationInteger = integerPairings.get(destination);
@@ -158,9 +194,19 @@ class MyAdjacenyMatrixGraph<T>{
         graph.addEdge(3,4);
         graph.addEdge(4,5);
         graph.addEdge(5,6);
+        System.out.println("Expected: see https://visualgo.net/en/graphds");
         graph.print();
         printSeperator();
+        System.out.println("Expected: 4");
         System.out.println(graph.breadthFirstSearch(0, 6));
+        printSeperator();
+        System.out.println("Expected: 2");
         System.out.println(graph.breadthFirstSearch(0, 3));
+        printSeperator();
+        System.out.println("Expected: 4");
+        System.out.println(graph.depthFirstSearch(0, 6));
+        printSeperator();
+        System.out.println("Expected: 2");
+        System.out.println(graph.depthFirstSearch(0, 3));
     }
 } 
