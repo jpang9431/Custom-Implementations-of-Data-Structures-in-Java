@@ -30,6 +30,9 @@ class MyAdjacenyMatrixGraph<T> {
         if (sourceInteger == null || destinationInteger == null) {
             return -1;
         }
+        if (source.equals(destination)){
+            return 0;
+        }
         int distance[] = new int[graph.length];
         boolean found[] = new boolean[graph.length];
         for (int i = 0; i < graph.length; i++) {
@@ -70,6 +73,9 @@ class MyAdjacenyMatrixGraph<T> {
         if (sourceInteger == null || destinationInteger == null) {
             return -1;
         }
+        if (source.equals(destination)){
+            return 0;
+        }
         boolean visited[] = new boolean[graph.length];
         int distance = depthFirstSearch(sourceInteger, visited, destinationInteger, 0);
         if (distance == Integer.MAX_VALUE) {
@@ -104,6 +110,9 @@ class MyAdjacenyMatrixGraph<T> {
         Integer destinationInteger = integerPairings.get(destination);
         if (sourceInteger == null || destinationInteger == null) {
             return -1;
+        }
+        if (source.equals(destination)){
+            return 0;
         }
         boolean visited[] = new boolean[graph.length];
         Queue<Integer> nodes = new LinkedList<>();
