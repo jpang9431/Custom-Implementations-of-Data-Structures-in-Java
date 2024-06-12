@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 public class MyBinarySearchTree<T extends Comparable<T>> {
     private Node<T> head = null;
     private int size = 0;
@@ -214,6 +215,20 @@ public class MyBinarySearchTree<T extends Comparable<T>> {
         print(node.left);
         System.out.print(node.data + " ");
         print(node.right);
+    }
+
+
+    public void addAll(ArrayList<T> list){
+        addAll(list, head);
+    }
+
+    public void addAll(ArrayList<T> list, Node<T> node){
+        if (node==null){
+            return;
+        }
+        addAll(list, node.left);
+        list.add(node.data);
+        addAll(list, node.right);
     }
 
     public void printHead() {
