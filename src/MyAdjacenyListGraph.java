@@ -88,7 +88,7 @@ public class MyAdjacenyListGraph<T> {
         for(Map.Entry<T,ArrayList<Node<T>>> entry : graph.entrySet()){
             String line = entry.getKey()+"|";
             for (Node<T> node : entry.getValue()){
-                line = line + node.connection + ",";
+                line = line + "<" + node.connection + "|" + node.weight + ">" + ",";
             }
             System.out.println(line);
         }
