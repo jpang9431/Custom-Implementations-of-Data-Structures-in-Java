@@ -164,6 +164,31 @@ public class MyAdjacenyListGraph<T> {
         return -1;
     }
 
+    public boolean addEdge(T vert1, T vert2, boolean directed) {
+        ArrayList<Node<T>> connections1 = graph.get(vert1);
+        ArrayList<Node<T>> connections2 = graph.get(vert2);
+        if (connections1 != null && connections2 != null) {
+            if (!directed) {
+                Node<T> tempNode = new Node<T>(vert1, 1);
+                int index = connections2.indexOf(tempNode);
+                if (index != -1) {
+                    connections2.get(index).weight++;
+                } else {
+                    connections2.add(tempNode);
+                }
+            }
+            Node<T> tempNode = new Node<T>(vert2, 1);
+            int index = connections1.indexOf(tempNode);
+            if (index != -1) {
+                connections1.get(index).weight++;
+            } else {
+                connections1.add(tempNode);
+            }
+            return true;
+        }
+        return false;
+    }
+    
     public boolean addVertex(T data){
         if(graph.get(data)==null){
             graph.put(data, new ArrayList<Node<T>>());
